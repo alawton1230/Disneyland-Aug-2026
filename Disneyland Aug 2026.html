@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SoCal Family Trip Planner — August 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Source+Sans+3:wght@300;400;600&display=swap');
+
+  :root {
+    --ink: #1a1f2e;
+    --paper: #f7f3ec;
+    --cream: #ede8dc;
+    --spruce: #362a5e;
+    --glacier: #2f7cb8;
+    --salmon: #d6483a;
+    --gold: #d4af37;
+    --mist: #9089a8;
+    --light-spruce: #ece9f5;
+    --light-glacier: #e7f1f8;
+    --light-salmon: #fdece9;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  .hero {
+    background: var(--spruce);
+    color: var(--paper);
+    padding: 48px 48px 36px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='120' height='80' viewBox='0 0 120 80' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='20' cy='70' r='4' fill='rgba(255,255,255,0.06)'/%3E%3Ccircle cx='60' cy='55' r='3' fill='rgba(255,255,255,0.05)'/%3E%3Ccircle cx='100' cy='65' r='4' fill='rgba(255,255,255,0.06)'/%3E%3Cpath d='M0 80 L20 45 L40 60 L60 30 L80 55 L100 25 L120 40 L120 80Z' fill='rgba(255,255,255,0.03)'/%3E%3C/svg%3E") repeat-x bottom;
+    background-size: 240px 160px;
+  }
+  .hero-inner { position: relative; max-width: 960px; margin: 0 auto; }
+  .hero-tag {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 5vw, 54px);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+  .hero-sub {
+    font-size: 16px;
+    font-weight: 300;
+    color: rgba(247,243,236,0.7);
+    margin-bottom: 28px;
+  }
+  .hero-meta {
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+  .meta-pill {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 24px;
+    padding: 6px 16px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  /* ── LAYOUT ── */
+  .container { max-width: 960px; margin: 0 auto; padding: 40px 24px; }
+
+  /* ── SECTION HEADERS ── */
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--ink);
+  }
+  .section-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+  }
+  .section-header .icon { font-size: 20px; }
+  .section-hint {
+    font-size: 12px;
+    color: var(--mist);
+    font-style: italic;
+    margin-left: auto;
+  }
+
+  /* ── BUDGET SUMMARY ── */
+  .budget-card {
+    background: var(--spruce);
+    color: var(--paper);
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin-bottom: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  .budget-label {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 4px;
+  }
+  .budget-total {
+    font-family: 'Playfair Display', serif;
+    font-size: 48px;
+    font-weight: 900;
+    line-height: 1;
+  }
+  .budget-breakdown {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .budget-mini { text-align: center; }
+  .budget-mini-val {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--gold);
+  }
+  .budget-mini-lbl {
+    font-size: 11px;
+    color: rgba(247,243,236,0.6);
+    margin-top: 2px;
+  }
+
+  /* ── COST TABLE ── */
+  .cost-table { width: 100%; border-collapse: collapse; margin-bottom: 40px; }
+  .cost-table thead th {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 10px 16px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+  .cost-table thead th:last-child { text-align: right; }
+  .cost-table tbody tr { border-bottom: 1px solid var(--cream); }
+  .cost-table tbody tr:hover { background: var(--cream); }
+  .cost-table tbody td {
+    padding: 12px 16px;
+    font-size: 14px;
+    vertical-align: middle;
+  }
+  .cost-table tbody td:last-child { text-align: right; }
+  .cost-category {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .cat-travel { background: var(--light-glacier); color: var(--glacier); }
+  .cat-lodging { background: var(--light-spruce); color: var(--spruce); }
+  .cat-activity { background: var(--light-salmon); color: var(--salmon); }
+  .cat-food { background: #fdf6e8; color: #a07830; }
+
+  .cost-input {
+    border: 1px solid transparent;
+    background: transparent;
+    width: 100px;
+    text-align: right;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .cost-input:hover, .cost-input:focus {
+    border-color: var(--glacier);
+    background: white;
+    outline: none;
+  }
+  .cost-table tfoot td {
+    padding: 14px 16px;
+    font-weight: 700;
+    font-size: 15px;
+    border-top: 2px solid var(--ink);
+    background: var(--cream);
+  }
+  .cost-table tfoot td:last-child { text-align: right; }
+
+  /* ── ITINERARY ── */
+  .itinerary { margin-bottom: 40px; }
+  .day-card {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    border: 1px solid var(--cream);
+  }
+  .day-header {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    cursor: pointer;
+    user-select: none;
+  }
+  .day-num {
+    background: var(--spruce);
+    color: var(--paper);
+    width: 56px;
+    min-height: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-family: 'Playfair Display', serif;
+  }
+  .day-num .dnum { font-size: 22px; font-weight: 900; line-height: 1; }
+  .day-num .dword { font-size: 9px; text-transform: uppercase; letter-spacing: 1px; opacity: 0.7; }
+  .day-title-area {
+    flex: 1;
+    padding: 14px 20px;
+  }
+  .day-date {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--mist);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+  .day-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    font-weight: 700;
+  }
+  .day-tags { display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap; }
+  .tag {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 10px;
+  }
+  .tag-disney { background: var(--light-spruce); color: var(--spruce); }
+  .tag-universal { background: var(--light-glacier); color: var(--glacier); }
+  .tag-family { background: var(--light-salmon); color: var(--salmon); }
+  .tag-travel { background: #f0ece0; color: #7a6840; }
+  .day-toggle {
+    padding: 0 20px;
+    font-size: 18px;
+    color: var(--mist);
+    transition: transform 0.2s;
+  }
+  .day-card.open .day-toggle { transform: rotate(180deg); }
+  .day-body {
+    display: none;
+    padding: 0 20px 20px 76px;
+    border-top: 1px solid var(--cream);
+  }
+  .day-card.open .day-body { display: block; }
+
+  .activity-list { list-style: none; padding-top: 16px; }
+  .activity-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--cream);
+  }
+  .activity-item:last-child { border-bottom: none; }
+  .activity-time {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--mist);
+    width: 68px;
+    flex-shrink: 0;
+    padding-top: 1px;
+  }
+  .activity-detail { flex: 1; }
+  .activity-name { font-weight: 600; font-size: 14px; }
+  .activity-note { font-size: 13px; color: #666; margin-top: 2px; line-height: 1.4; }
+  .activity-link {
+    font-size: 12px;
+    color: var(--glacier);
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .activity-link:hover { text-decoration: underline; }
+
+  /* ── BOOKING CHECKLIST ── */
+  .checklist { margin-bottom: 40px; }
+  .check-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 640px) { .check-grid { grid-template-columns: 1fr; } }
+  .check-item {
+    background: white;
+    border: 1px solid var(--cream);
+    border-radius: 8px;
+    padding: 14px 16px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .check-item:hover { border-color: var(--glacier); }
+  .check-item.done { background: var(--light-spruce); border-color: var(--spruce); }
+  .check-item.done .check-name { text-decoration: line-through; color: var(--mist); }
+  .check-box {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--cream);
+    border-radius: 4px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    transition: all 0.15s;
+    margin-top: 1px;
+  }
+  .check-item.done .check-box {
+    background: var(--spruce);
+    border-color: var(--spruce);
+    color: white;
+  }
+  .check-name { font-weight: 600; font-size: 14px; }
+  .check-note { font-size: 12px; color: #888; margin-top: 2px; }
+  .check-urgency {
+    margin-left: auto;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 10px;
+    flex-shrink: 0;
+  }
+  .urgent { background: #fdecea; color: #c0392b; }
+  .soon { background: #fff8e1; color: #a07830; }
+  .later { background: var(--light-glacier); color: var(--glacier); }
+
+  /* ── NOTES ── */
+  .notes-area {
+    width: 100%;
+    min-height: 120px;
+    border: 1px solid var(--cream);
+    border-radius: 8px;
+    padding: 16px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 14px;
+    color: var(--ink);
+    background: white;
+    resize: vertical;
+    line-height: 1.6;
+    margin-bottom: 40px;
+  }
+  .notes-area:focus { outline: none; border-color: var(--glacier); }
+
+  /* ── FOOTER ── */
+  .footer {
+    background: var(--ink);
+    color: rgba(247,243,236,0.5);
+    text-align: center;
+    padding: 20px;
+    font-size: 12px;
+  }
+  .footer span { color: var(--gold); }
+
+  /* ── SECTION SPACING ── */
+  section { margin-bottom: 48px; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">🎢 Family Vacation Planner</div>
+    <h1>Disneyland + Universal Studios Hollywood</h1>
+    <div class="hero-sub">August 2–8, 2026 &nbsp;·&nbsp; Family of 5 &nbsp;·&nbsp; Military Discount Trip</div>
+    <div class="hero-meta">
+      <div class="meta-pill">🚗 San Diego → Anaheim → LA</div>
+      <div class="meta-pill">🏰 Disneyland Resort (3 Days)</div>
+      <div class="meta-pill">🎬 Universal Studios Hollywood (2 Days)</div>
+      <div class="meta-pill">🎖 Military Discount</div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- BUDGET SUMMARY -->
+  <div class="budget-card">
+    <div>
+      <div class="budget-label">Estimated Total</div>
+      <div class="budget-total" id="grand-total">$0</div>
+      <div style="font-size:12px;opacity:0.5;margin-top:6px;">Updates live as you edit costs below</div>
+    </div>
+    <div class="budget-breakdown">
+      <div class="budget-mini">
+        <div class="budget-mini-val" id="total-travel">—</div>
+        <div class="budget-mini-lbl">Travel</div>
+      </div>
+      <div class="budget-mini">
+        <div class="budget-mini-val" id="total-lodging">—</div>
+        <div class="budget-mini-lbl">Lodging</div>
+      </div>
+      <div class="budget-mini">
+        <div class="budget-mini-val" id="total-activity">—</div>
+        <div class="budget-mini-lbl">Activities</div>
+      </div>
+      <div class="budget-mini">
+        <div class="budget-mini-val" id="total-food">—</div>
+        <div class="budget-mini-lbl">Food</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COST BREAKDOWN -->
+  <section>
+    <div class="section-header">
+      <span class="icon">💰</span>
+      <h2>Cost Breakdown</h2>
+      <span class="section-hint">Click any cost to edit it</span>
+    </div>
+    <table class="cost-table">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Category</th>
+          <th>Notes</th>
+          <th>Cost</th>
+        </tr>
+      </thead>
+      <tbody id="cost-tbody">
+        <!-- rows injected by JS -->
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="3">Estimated Total</td>
+          <td id="foot-total">$0</td>
+        </tr>
+      </tfoot>
+    </table>
+  </section>
+
+  <!-- ITINERARY -->
+  <section>
+    <div class="section-header">
+      <span class="icon">🗓</span>
+      <h2>Day-by-Day Itinerary</h2>
+      <span class="section-hint">Click a day to expand</span>
+    </div>
+    <div class="itinerary" id="itinerary-container">
+      <!-- injected by JS -->
+    </div>
+  </section>
+
+  <!-- BOOKING CHECKLIST -->
+  <section>
+    <div class="section-header">
+      <span class="icon">✅</span>
+      <h2>Booking Checklist</h2>
+      <span class="section-hint">Click to mark done</span>
+    </div>
+    <div class="check-grid" id="checklist-container">
+      <!-- injected by JS -->
+    </div>
+  </section>
+
+  <!-- NOTES -->
+  <section>
+    <div class="section-header">
+      <span class="icon">📝</span>
+      <h2>Notes & Reminders</h2>
+    </div>
+    <textarea class="notes-area" id="notes-area" placeholder="Add any notes, ideas, or reminders here…">
+- Military tickets must be purchased via GOVX.com or a base ITT/Military Ticket & Travel office — not the public Disney/Universal sites
+- Bring valid military ID — required to activate Disneyland military tickets at the gate (member or spouse)
+- Disneyland requires a park reservation in addition to tickets — book as soon as tickets are purchased
+- Check for the Sun–Thu (15% off) or 4+ night (25% off) Disneyland Resort hotel promo against our actual dates
+- Download the Disneyland and Universal Studios Hollywood apps ahead of time for mobile ordering, wait times, and Lightning Lane/Express Pass purchases
+- August is peak season — expect long lines; consider Lightning Lane Multi Pass or Universal Express for at least one day
+- Pack for heat: sunscreen, hats, refillable water bottles, comfortable broken-in shoes
+    </textarea>
+  </section>
+
+</div>
+
+<div class="footer">
+  SoCal Trip Planner &nbsp;·&nbsp; <span>August 2–8, 2026</span> &nbsp;·&nbsp; All costs are estimates — verify with providers before booking
+</div>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────
+
+const costs = [
+  { id:'tickets-dl', label:'Disneyland 3-Day Park Hopper — Military Rate (5 pax)', cat:'activity', note:'Purchase via GOVX or base ITT office; military ID required at gate', amount:1570 },
+  { id:'tickets-us',  label:'Universal Studios Hollywood — Military Tickets, 2 Days (5 pax)', cat:'activity', note:'Confirm 2-day coverage with a Military Ticket & Travel Office', amount:575 },
+  { id:'hotel-dl',    label:'Disneyland Resort Hotel (3 nights, room for 5)', cat:'lodging', note:'Grand Californian / Disneyland Hotel; check military & weeknight promo rates', amount:3000 },
+  { id:'hotel-us',    label:'Hotel near Universal Studios Hollywood (2 nights, suite for 5)', cat:'lodging', note:'e.g. Embassy Suites or BLVD Hotel & Studios', amount:600 },
+  { id:'gas',         label:'Gas — San Diego ↔ Anaheim ↔ LA ↔ San Diego', cat:'travel', note:'~230 total road miles plus local driving', amount:150 },
+  { id:'parking',     label:'Theme Park & Resort Parking', cat:'travel', note:'Disney resort self-park + daily Universal parking', amount:225 },
+  { id:'food',        label:'Food & Dining (7 days)', cat:'food', note:'Mix of park quick-service, hotel breakfast, and a few sit-down dinners', amount:1500 },
+  { id:'extras',      label:'Souvenirs & Extras', cat:'activity', note:'Character merch, photo packages, incidentals', amount:350 },
+];
+
+const days = [
+  {
+    num: 1, word:'Sun', label:'August 2', title:'Travel Day — San Diego to Anaheim',
+    tags:['travel','family'],
+    activities:[
+      { time:'9:00 AM', name:'Depart San Diego', note:'Drive north on I-5, roughly 90 minutes to Anaheim depending on traffic.' },
+      { time:'11:00 AM', name:'Check in — Disneyland Resort Hotel', note:'Grand Californian or Disneyland Hotel. Drop bags, check hotel pool hours.' },
+      { time:'1:00 PM', name:'Lunch at Downtown Disney District', note:'Casual first afternoon — browse shops, ease into vacation mode.' },
+      { time:'4:00 PM', name:'Early park time (if eligible)', note:'Hotel guests may get early entry — check current Disneyland hours for the day.' },
+      { time:'8:30 PM', name:'Fireworks viewing', note:'Watch the nighttime spectacular from Main Street or Downtown Disney.' },
+    ]
+  },
+  {
+    num: 2, word:'Mon', label:'August 3', title:'Disneyland Park — Day 1',
+    tags:['disney','family'],
+    activities:[
+      { time:'7:30 AM', name:'Early entry — Disneyland Park', note:'Hotel guest perk; head straight for the busiest headliners first.' },
+      { time:'8:00 AM', name:'Priority attractions', note:'Rise of the Resistance, Space Mountain, Matterhorn Bobsleds, Indiana Jones Adventure.' },
+      { time:'12:00 PM', name:'Lunch in park', note:'Mobile order ahead to skip lines — check the Disneyland app.' },
+      { time:'2:00 PM', name:'Character meet & greets / parade', note:'Check daily entertainment schedule on the app.' },
+      { time:'6:00 PM', name:'Dinner break at hotel', note:'Rest, swim, recharge before evening activities.' },
+      { time:'9:00 PM', name:'Nighttime show', note:'Catch fireworks or projection show — arrive 30+ min early for viewing spots.' },
+    ]
+  },
+  {
+    num: 3, word:'Tue', label:'August 4', title:'Disney California Adventure — Day 2',
+    tags:['disney','family'],
+    activities:[
+      { time:'7:30 AM', name:'Early entry — Disney California Adventure', note:'Head to Radiator Springs Racers and Guardians of the Galaxy first.' },
+      { time:'10:00 AM', name:'Pixar Pier & Cars Land', note:'Rides and photo ops; consider Lightning Lane for the biggest lines.' },
+      { time:'1:00 PM', name:'Lunch in park', note:'Try a table-service spot if you booked ahead, or quick-service to save time.' },
+      { time:'3:00 PM', name:'Avengers Campus', note:'Web Slingers and character interactions.' },
+      { time:'7:00 PM', name:'Dinner', note:'Downtown Disney or park dining.' },
+      { time:'9:00 PM', name:'World of Color', note:'Water and light show at Paradise Bay — arrive early for good viewing.' },
+    ]
+  },
+  {
+    num: 4, word:'Wed', label:'August 5', title:'Park Hopper Day + Drive to LA',
+    tags:['disney','travel'],
+    activities:[
+      { time:'8:00 AM', name:'Park hop — final Disneyland/DCA must-dos', note:'Use remaining Park Hopper time to hit anything missed.' },
+      { time:'12:00 PM', name:'Check out of Disneyland Resort Hotel', note:'Load up the car; grab lunch before heading north.' },
+      { time:'2:00 PM', name:'Drive to Universal City area', note:'~45 minutes via I-5/US-101 depending on traffic.' },
+      { time:'4:00 PM', name:'Check in — hotel near Universal Studios Hollywood', note:'Confirm room configuration works for the family of 5.' },
+      { time:'7:00 PM', name:'Dinner at Universal CityWalk', note:'Browse shops and restaurants; scope out tomorrow\'s park entrance.' },
+    ]
+  },
+  {
+    num: 5, word:'Thu', label:'August 6', title:'Universal Studios Hollywood — Day 1',
+    tags:['universal','family'],
+    activities:[
+      { time:'8:30 AM', name:'Early park entry', note:'Head straight for Super Nintendo World before crowds build.' },
+      { time:'10:30 AM', name:'The Wizarding World of Harry Potter', note:'Flight of the Hippogriff, Forbidden Journey, Ollivanders wand experience.' },
+      { time:'1:00 PM', name:'Lunch in park', note:'Try Three Broomsticks or CityWalk options.' },
+      { time:'2:30 PM', name:'Studio Tour', note:'Behind-the-scenes tram tour — a Universal Hollywood signature.' },
+      { time:'5:00 PM', name:'Remaining rides & shows', note:'Revenge of the Mummy, Jurassic World, WaterWorld stunt show if scheduled.' },
+      { time:'8:00 PM', name:'Dinner at CityWalk', note:'Wind down after a full first day.' },
+    ]
+  },
+  {
+    num: 6, word:'Fri', label:'August 7', title:'Universal Studios Hollywood — Day 2',
+    tags:['universal','family'],
+    activities:[
+      { time:'9:00 AM', name:'Super Nintendo World (return visit)', note:'Mario Kart: Bowser\'s Challenge and Power-Up Bands, if not finished Day 1.' },
+      { time:'11:00 AM', name:'Any missed attractions', note:'Fill in anything skipped the day before.' },
+      { time:'1:00 PM', name:'Lunch in park', note:'Mobile order via the Universal app to save time.' },
+      { time:'3:00 PM', name:'Shows & character photos', note:'Check the daily entertainment schedule.' },
+      { time:'5:00 PM', name:'Check out of hotel', note:'Pack up before evening activities wrap.' },
+      { time:'6:30 PM', name:'Farewell dinner at CityWalk', note:'Last night of the trip — celebrate before the drive home tomorrow.' },
+    ]
+  },
+  {
+    num: 7, word:'Sat', label:'August 8', title:'Drive Home to San Diego',
+    tags:['travel'],
+    activities:[
+      { time:'9:00 AM', name:'Depart Universal City area', note:'Beat midday traffic on I-5 south if possible.' },
+      { time:'11:30 AM', name:'Arrive home in San Diego', note:'~2 hour drive depending on traffic; stop for lunch en route if needed.' },
+    ]
+  },
+];
+
+const checklist = [
+  { label:'Purchase Disneyland military tickets', note:'Via GOVX.com or a base ITT office — not the public Disney site', urgency:'urgent' },
+  { label:'Purchase Universal Studios Hollywood military tickets', note:'Via a Military Ticket & Travel Office; confirm 2-day coverage', urgency:'urgent' },
+  { label:'Reserve Disneyland Resort hotel', note:'Grand Californian or Disneyland Hotel; room for 5', urgency:'urgent' },
+  { label:'Make Disneyland Park Reservations', note:'Required in addition to tickets — one per ticketed day', urgency:'urgent' },
+  { label:'Reserve hotel near Universal Studios Hollywood', note:'Confirm suite/room configuration fits 5', urgency:'soon' },
+  { label:'Check military & weeknight hotel discounts', note:'Compare against Sun–Thu 15% / 4+ night 25% public promo', urgency:'soon' },
+  { label:'Decide on Lightning Lane / Universal Express', note:'Worth it for at least one day given August crowds', urgency:'soon' },
+  { label:'Book any table-service dining in advance', note:'Popular restaurants fill up, especially in peak summer', urgency:'soon' },
+  { label:'Download Disneyland & Universal apps', note:'Mobile ordering, wait times, Lightning Lane/Express purchases', urgency:'later' },
+  { label:'Pack for summer heat', note:'Sunscreen, hats, refillable water bottles, broken-in shoes', urgency:'later' },
+  { label:'Travel insurance', note:'Optional, but worth considering for a family trip this size', urgency:'later' },
+];
+
+// ── CATEGORY HELPERS ──────────────────────────────────────────────────
+
+const catClass = { travel:'cat-travel', lodging:'cat-lodging', activity:'cat-activity', food:'cat-food' };
+const catLabel = { travel:'Travel', lodging:'Lodging', activity:'Activity', food:'Food' };
+const tagClass  = { disney:'tag-disney', universal:'tag-universal', family:'tag-family', travel:'tag-travel' };
+const tagLabel  = { disney:'🏰 Disneyland', universal:'🎬 Universal', family:'👨‍👩‍👧‍👦 Family', travel:'🚗 Travel' };
+const urgClass  = { urgent:'urgent', soon:'soon', later:'later' };
+const urgLabel  = { urgent:'Book Now', soon:'Book Soon', later:'Before Trip' };
+
+// ── RENDER COSTS ──────────────────────────────────────────────────────
+
+function fmt(n){ return '$' + Math.round(n).toLocaleString(); }
+
+function recalc(){
+  let total=0, totals={travel:0,lodging:0,activity:0,food:0};
+  costs.forEach(c=>{
+    total+=c.amount;
+    totals[c.cat]=(totals[c.cat]||0)+c.amount;
+  });
+  document.getElementById('grand-total').textContent = fmt(total);
+  document.getElementById('foot-total').textContent  = fmt(total);
+  document.getElementById('total-travel').textContent  = fmt(totals.travel||0);
+  document.getElementById('total-lodging').textContent = fmt(totals.lodging||0);
+  document.getElementById('total-activity').textContent= fmt(totals.activity||0);
+  document.getElementById('total-food').textContent    = fmt(totals.food||0);
+}
+
+function renderCosts(){
+  const tbody = document.getElementById('cost-tbody');
+  tbody.innerHTML = '';
+  costs.forEach((c,i)=>{
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><strong>${c.label}</strong></td>
+      <td><span class="cost-category ${catClass[c.cat]}">${catLabel[c.cat]}</span></td>
+      <td style="color:#888;font-size:13px;">${c.note}</td>
+      <td>
+        <input class="cost-input" type="number" value="${c.amount}" data-idx="${i}" min="0" step="25">
+      </td>`;
+    tbody.appendChild(tr);
+  });
+  tbody.querySelectorAll('.cost-input').forEach(inp=>{
+    inp.addEventListener('change', e=>{
+      costs[+e.target.dataset.idx].amount = parseFloat(e.target.value)||0;
+      recalc();
+    });
+  });
+  recalc();
+}
+
+// ── RENDER ITINERARY ──────────────────────────────────────────────────
+
+function renderItinerary(){
+  const cont = document.getElementById('itinerary-container');
+  days.forEach(d=>{
+    const card = document.createElement('div');
+    card.className='day-card';
+    const activitiesHtml = d.activities.map(a=>`
+      <li class="activity-item">
+        <span class="activity-time">${a.time}</span>
+        <div class="activity-detail">
+          <div class="activity-name">${a.name}</div>
+          <div class="activity-note">${a.note}${a.link?` <a class="activity-link" href="${a.link}" target="_blank">↗ Website</a>`:''}${a.phone?` · <span style="color:#888">${a.phone}</span>`:''}</div>
+        </div>
+      </li>`).join('');
+    const tagsHtml = d.tags.map(t=>`<span class="tag ${tagClass[t]}">${tagLabel[t]}</span>`).join('');
+    card.innerHTML = `
+      <div class="day-header">
+        <div class="day-num"><div class="dnum">${d.num}</div><div class="dword">${d.word}</div></div>
+        <div class="day-title-area">
+          <div class="day-date">${d.label}</div>
+          <div class="day-title">${d.title}</div>
+          <div class="day-tags">${tagsHtml}</div>
+        </div>
+        <div class="day-toggle">▼</div>
+      </div>
+      <div class="day-body"><ul class="activity-list">${activitiesHtml}</ul></div>`;
+    card.querySelector('.day-header').addEventListener('click',()=>card.classList.toggle('open'));
+    // Open Day 1 by default
+    if(d.num===1) card.classList.add('open');
+    cont.appendChild(card);
+  });
+}
+
+// ── RENDER CHECKLIST ──────────────────────────────────────────────────
+
+function renderChecklist(){
+  const cont = document.getElementById('checklist-container');
+  const saved = JSON.parse(localStorage.getItem('socal-checklist')||'{}');
+  checklist.forEach((c,i)=>{
+    const div = document.createElement('div');
+    div.className = 'check-item' + (saved[i]?' done':'');
+    div.innerHTML = `
+      <div class="check-box">${saved[i]?'✓':''}</div>
+      <div>
+        <div class="check-name">${c.label}</div>
+        <div class="check-note">${c.note}</div>
+      </div>
+      <span class="check-urgency ${urgClass[c.urgency]}">${urgLabel[c.urgency]}</span>`;
+    div.addEventListener('click',()=>{
+      const isDone = div.classList.toggle('done');
+      div.querySelector('.check-box').textContent = isDone?'✓':'';
+      const s = JSON.parse(localStorage.getItem('socal-checklist')||'{}');
+      s[i] = isDone;
+      localStorage.setItem('socal-checklist', JSON.stringify(s));
+    });
+    cont.appendChild(div);
+  });
+}
+
+// ── NOTES PERSISTENCE ─────────────────────────────────────────────────
+
+function initNotes(){
+  const ta = document.getElementById('notes-area');
+  const saved = localStorage.getItem('socal-notes');
+  if(saved !== null) ta.value = saved;
+  ta.addEventListener('input', ()=> localStorage.setItem('socal-notes', ta.value));
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────
+
+renderCosts();
+renderItinerary();
+renderChecklist();
+initNotes();
+</script>
+</body>
+</html>
